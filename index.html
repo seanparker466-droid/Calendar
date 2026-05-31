@@ -41,7 +41,7 @@
       transition: background-color 0.4s ease, color 0.4s ease;
     }
 
-    /* Light Theme Force Overrides for Tailwind Utility Classes */
+    /* Light Theme Force Overrides for Widescreen Contrast */
     body.light-theme .themed-card,
     body.light-theme header,
     body.light-theme footer {
@@ -55,7 +55,8 @@
     body.light-theme .text-slate-300,
     body.light-theme h2,
     body.light-theme h3,
-    body.light-theme h4 {
+    body.light-theme h4,
+    body.light-theme span.text-white {
       color: #0f172a !important;
     }
 
@@ -68,7 +69,7 @@
       color: #64748b !important;
     }
 
-    /* Input & Interactive Overrides */
+    /* Light Theme Input Customizing */
     body.light-theme .themed-input,
     body.light-theme input[type="text"],
     body.light-theme input[type="datetime-local"],
@@ -82,7 +83,7 @@
       color: #94a3b8 !important;
     }
 
-    /* Custom Textarea Note board adaptation */
+    /* Sticky Notepad styling adaptive light theme override */
     body.light-theme textarea {
       background-color: rgba(245, 158, 11, 0.06) !important;
       color: #78350f !important;
@@ -92,7 +93,7 @@
       color: rgba(120, 53, 15, 0.4) !important;
     }
 
-    /* Dark background container resets in Light Mode */
+    /* Background container washes in Light Theme */
     body.light-theme .bg-slate-950\/40,
     body.light-theme .bg-slate-950\/25,
     body.light-theme .bg-slate-950\/20,
@@ -110,7 +111,7 @@
       border-color: rgba(15, 23, 42, 0.08) !important;
     }
 
-    /* Adaptive Clock Styling overrides */
+    /* Clock light theme color corrections */
     body.light-theme #live-time.text-white {
       color: #0f172a !important;
     }
@@ -123,7 +124,7 @@
       text-shadow: 0 0 12px rgba(15, 23, 42, 0.12) !important;
     }
 
-    /* Fixed Landscape Layout Styles */
+    /* Strictly Enforced 16:9 Screen Heights */
     html, body {
       margin: 0;
       padding: 0;
@@ -150,7 +151,7 @@
       color: var(--text-muted);
     }
 
-    /* Extended Clock Font Styles */
+    /* Clock Typography Collections */
     .font-clock-sans { font-family: 'Inter', sans-serif; }
     .font-clock-digital { font-family: 'Share Tech Mono', monospace; }
     .font-clock-elegant { font-family: 'Playfair Display', serif; }
@@ -168,14 +169,14 @@
       50% { opacity: 0.1; }
     }
 
-    /* Clock Glow Presets */
+    /* Neon Clock Glow Presets */
     .clock-glow-white { text-shadow: 0 0 12px rgba(255, 255, 255, 0.35); }
     .clock-glow-emerald { text-shadow: 0 0 15px rgba(16, 185, 129, 0.65); }
     .clock-glow-blue { text-shadow: 0 0 15px rgba(59, 130, 246, 0.65); }
     .clock-glow-amber { text-shadow: 0 0 15px rgba(245, 158, 11, 0.65); }
     .clock-glow-ruby { text-shadow: 0 0 15px rgba(239, 68, 68, 0.65); }
 
-    /* Infinite Horizontal Scrolling News Marquee CSS */
+    /* Cinematic News Marquee Track */
     @keyframes scroll-marquee {
       0% { transform: translate3d(0, 0, 0); }
       100% { transform: translate3d(-50%, 0, 0); }
@@ -212,11 +213,11 @@
   <!-- HEADER: Exactly 14% Viewport Height -->
   <header class="flex-shrink-0 h-[14vh] min-h-[105px] flex justify-between items-center bg-slate-950/50 backdrop-blur-lg px-5 py-2.5 rounded-2xl border border-white/10 shadow-2xl z-10" style="background-color: var(--header-bg); border-color: var(--card-border);">
     
-    <!-- LEFT PANEL: Modular Customizer Clock -->
+    <!-- LEFT PANEL: Adaptive Clock & Setting Trigger -->
     <div id="clock-container-card" class="flex items-center gap-3.5 min-w-[30%] rounded-xl transition-all duration-300">
       <div class="text-left flex items-center gap-3">
-        <div id="live-time" class="text-3xl md:text-4xl font-extrabold tracking-tight tabular-nums flex items-center font-clock-sans">00:00:00</div>
-        <div id="ampm-badge" class="px-2 py-0.5 text-xs font-black tracking-wider uppercase border border-white/20 rounded-md bg-white/5">--</div>
+        <div id="live-time" class="text-3xl md:text-4xl font-extrabold tracking-tight tabular-nums flex items-center font-clock-sans text-white">00:00:00</div>
+        <div id="ampm-badge" class="px-2 py-0.5 text-xs font-black tracking-wider uppercase border border-white/20 rounded-md bg-white/5 text-white">--</div>
       </div>
       
       <div class="flex flex-col gap-1 ml-1.5 border-l border-white/10 pl-2.5">
@@ -232,16 +233,16 @@
       </div>
     </div>
 
-    <!-- RIGHT PANEL: Expanded Dual-Level Weather Center (Current + 5-Day Forecast) -->
+    <!-- RIGHT PANEL: Dryden, MI Keyless Weather Center (Current + 5-Day) -->
     <div class="flex flex-1 items-center justify-between ml-4 pl-4 border-l border-white/10 max-w-[70%] h-full">
-      <!-- Live Current Weather Block - EXPANDED -->
+      <!-- Live Current Weather Block -->
       <div class="flex items-center gap-4 min-w-[35%]">
         <div id="weather-icon-container" class="text-amber-400 flex-shrink-0 bg-white/5 p-2.5 rounded-xl border border-white/10 shadow-lg">
           <i data-lucide="sun-snow" class="w-10 h-10 animate-bounce"></i>
         </div>
         <div class="min-w-0">
           <div class="flex items-baseline gap-2">
-            <span id="weather-temp" class="text-3xl font-black">--°F</span>
+            <span id="weather-temp" class="text-3xl font-black text-white">--°F</span>
             <span id="weather-desc" class="text-xs text-emerald-400 font-extrabold truncate uppercase tracking-wider">Syncing...</span>
           </div>
           <div class="text-[10px] text-muted-custom font-medium flex flex-col leading-relaxed">
@@ -251,38 +252,36 @@
         </div>
       </div>
 
-      <!-- Horizontal 5-Day Weather Forecast Deck - EXPANDED SIZES -->
+      <!-- Horizontal 5-Day Forecast Deck -->
       <div class="flex items-center gap-3 overflow-hidden ml-3 pl-3 border-l border-white/5 flex-1 justify-end" id="weather-forecast-deck">
-        <!-- Days are injected dynamically -->
+        <!-- Days injected dynamically -->
       </div>
     </div>
   </header>
 
-  <!-- MAIN WORKSPACE: Exactly 80% Viewport Height -->
+  <!-- MAIN WORKSPACE: Exactly 81.5% Viewport Height -->
   <main class="flex-1 min-h-0 grid grid-cols-12 gap-3.5">
     
-    <!-- LEFT PANEL: Live Google Calendar Stream (Col Span 5) -->
+    <!-- COLUMN 1: Live Google Calendar Stream (Col Span 5) -->
     <section class="col-span-5 flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden h-full">
       <div class="px-3.5 py-2 border-b border-white/5 flex justify-between items-center bg-white/5 flex-shrink-0">
         <div class="flex items-center gap-2">
           <div class="p-1 bg-blue-500/10 text-blue-400 rounded-lg">
             <i data-lucide="calendar" class="w-4 h-4"></i>
           </div>
-          <div>
-            <h2 class="text-[10px] font-black uppercase tracking-wider text-slate-200">Family Calendar</h2>
-          </div>
+          <h2 class="text-[10px] font-black uppercase tracking-wider text-slate-200">Family Calendar</h2>
         </div>
-        <button onclick="openCalendarSettings()" class="px-2 py-0.5 bg-white/5 hover:bg-white/10 text-[9px] font-semibold rounded-md border border-white/10 transition flex items-center gap-1">
+        <button onclick="openCalendarSettings()" class="px-2 py-0.5 bg-white/5 hover:bg-white/10 text-[9px] font-semibold rounded-md border border-white/10 transition flex items-center gap-1 text-slate-200">
           <i data-lucide="settings" class="w-2.5 h-2.5"></i> Sync Calendar
         </button>
       </div>
       
-      <div id="calendar-wrapper" class="flex-1 min-h-0 p-2 bg-slate-950/10">
+      <div id="calendar-wrapper" class="flex-grow min-h-0 p-2 bg-slate-950/10">
         <div id="calendar-placeholder" class="h-full flex flex-col items-center justify-center text-center p-4">
           <div class="w-10 h-10 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center mb-2.5 border border-blue-500/20">
             <i data-lucide="calendar-plus" class="w-5 h-5"></i>
           </div>
-          <h3 class="font-bold text-xs mb-1">Sync Google Calendar</h3>
+          <h3 class="font-bold text-xs mb-1 text-white">Sync Google Calendar</h3>
           <p class="text-muted-custom text-[9px] max-w-xs mb-2">Configure your google schedule iframe or URL inside the sync menu.</p>
           <button onclick="openCalendarSettings()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-semibold rounded-lg shadow-lg transition">
             Configure Now
@@ -292,8 +291,8 @@
       </div>
     </section>
 
-    <!-- MIDDLE PANEL: Meal Planner, Live Sports Scores & Family Notes (Col Span 4) -->
-    <section class="col-span-4 flex flex-col gap-3 h-full min-h-0">
+    <!-- COLUMN 2: Meals, Real-time Sports Scores & Notes (Col Span 4) -->
+    <section class="col-span-4 flex flex-col gap-3.5 h-full min-h-0">
       
       <!-- 1. Weekly Meals (Compact h-[22%]) -->
       <div class="h-[22%] flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden">
@@ -314,7 +313,7 @@
         </div>
       </div>
 
-      <!-- 2. Real-time Sports Scores (Dynamic Sports Widget h-[40%]) -->
+      <!-- 2. Real-time Sports Scores (Scoreboard Widget h-[40%]) -->
       <div class="h-[40%] flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden">
         <div class="px-3 py-1.5 border-b border-white/5 flex justify-between items-center bg-white/5 flex-shrink-0">
           <div class="flex items-center gap-1.5">
@@ -331,10 +330,7 @@
 
         <!-- Scrollable Scoreboard body -->
         <div id="sports-scores-container" class="flex-grow overflow-y-auto p-2 space-y-1.5 bg-slate-950/20">
-          <div class="text-center py-4 text-slate-500">
-            <div class="animate-spin inline-block w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full mb-1"></div>
-            <p class="text-[9px]">Fetching live games...</p>
-          </div>
+          <!-- Populated dynamically -->
         </div>
       </div>
 
@@ -360,8 +356,8 @@
       </div>
     </section>
 
-    <!-- RIGHT PANEL: Grocery Checklist & Countdowns (Col Span 3) -->
-    <section class="col-span-3 flex flex-col gap-3 h-full min-h-0">
+    <!-- COLUMN 3: Grocery Checklist & Countdowns (Col Span 3) -->
+    <section class="col-span-3 flex flex-col gap-3.5 h-full min-h-0">
       
       <!-- Groceries Container (h-[50%]) -->
       <div class="h-[50%] flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden">
@@ -373,14 +369,14 @@
             <h2 class="text-[10px] font-black uppercase tracking-wider text-slate-200">Groceries</h2>
           </div>
           <button onclick="clearCheckedGroceries()" class="text-[8px] text-muted-custom hover:text-rose-400 transition flex items-center gap-0.5">
-            <i data-lucide="trash-2" class="w-3 h-3"></i> Clear Checked
+            <i data-lucide="trash-2" class="w-3.0 h-3.0"></i> Clear Done
           </button>
         </div>
 
         <div class="p-2 bg-black/10 border-b border-white/5 flex-shrink-0">
-          <form onsubmit="addGroceryItem(event)" class="flex gap-1">
-            <input id="grocery-input" type="text" placeholder="Add grocery item..." class="flex-grow themed-input rounded-lg px-2 py-1 text-[11px] focus:outline-none focus:border-amber-500 transition placeholder-slate-600">
-            <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 p-1 rounded-lg transition font-bold flex items-center justify-center">
+          <form onsubmit="addGroceryItem(event)" class="flex gap-1.5">
+            <input id="grocery-input" type="text" placeholder="Add grocery item..." class="flex-grow themed-input rounded-lg px-2 py-1 text-[11px] focus:outline-none focus:border-amber-500 transition placeholder-slate-600 bg-slate-900 border-white/10 text-white">
+            <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 p-1.5 rounded-lg transition font-bold flex items-center justify-center">
               <i data-lucide="plus" class="w-3.5 h-3.5"></i>
             </button>
           </form>
@@ -419,7 +415,6 @@
     </div>
     <div class="flex-1 overflow-hidden relative marquee-container flex items-center h-full">
       <div id="marquee-track-content" class="marquee-track text-[10px] text-slate-300 font-bold tracking-wide flex items-center gap-12 select-none">
-        <!-- Grounded News Items Scroll Here -->
         <span class="flex items-center gap-1.5"><i data-lucide="refresh-cw" class="w-3 h-3 animate-spin"></i> Synchronizing world news feed...</span>
       </div>
     </div>
@@ -444,8 +439,7 @@
       </div>
 
       <div class="space-y-3.5 text-xs">
-        
-        <!-- Typography Options (Expanded to 8 Families) -->
+        <!-- Typography Options -->
         <div>
           <label class="block text-[9px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Clock Font Choices (8 Options)</label>
           <div class="grid grid-cols-2 gap-1.5">
@@ -509,7 +503,7 @@
           </div>
         </div>
 
-        <!-- Self-Hosted Gemini API Setup Section -->
+        <!-- Gemini API Setup Section -->
         <div class="pt-2.5 border-t border-slate-800/85">
           <label class="block text-[9px] font-black text-amber-400 uppercase tracking-wider mb-1">Self-Hosted Live API Sync (Optional)</label>
           <div class="space-y-1">
@@ -525,30 +519,22 @@
         <!-- Clock toggles -->
         <div class="grid grid-cols-2 gap-1.5 pt-2 border-t border-slate-800/80">
           <div class="flex justify-between items-center bg-slate-950 p-2 rounded-lg border border-slate-800">
-            <div>
-              <h4 class="font-bold text-[9px]">24H Clock Cycle</h4>
-            </div>
+            <div><h4 class="font-bold text-[9px]">24H Clock Cycle</h4></div>
             <button id="clock-format-toggle" onclick="toggleClockFormat()" class="px-2 py-0.5 bg-blue-600 hover:bg-blue-500 text-white text-[9px] font-bold rounded transition">12H Mode</button>
           </div>
 
           <div class="flex justify-between items-center bg-slate-950 p-2 rounded-lg border border-slate-800">
-            <div>
-              <h4 class="font-bold text-[9px]">Clock Seconds</h4>
-            </div>
+            <div><h4 class="font-bold text-[9px]">Clock Seconds</h4></div>
             <button id="clock-seconds-toggle" onclick="toggleClockSeconds()" class="px-2 py-0.5 bg-blue-600 hover:bg-blue-500 text-white text-[9px] font-bold rounded transition">Visible</button>
           </div>
 
           <div class="flex justify-between items-center bg-slate-950 p-2 rounded-lg border border-slate-800">
-            <div>
-              <h4 class="font-bold text-[9px]">Flashing Separator</h4>
-            </div>
+            <div><h4 class="font-bold text-[9px]">Flashing Separator</h4></div>
             <button id="clock-blink-toggle" onclick="toggleClockBlink()" class="px-2 py-0.5 bg-blue-600 hover:bg-blue-500 text-white text-[9px] font-bold rounded transition">Blinking</button>
           </div>
 
           <div class="flex justify-between items-center bg-slate-950 p-2 rounded-lg border border-slate-800">
-            <div>
-              <h4 class="font-bold text-[9px]">Luminous Glow</h4>
-            </div>
+            <div><h4 class="font-bold text-[9px]">Luminous Glow</h4></div>
             <button id="clock-glow-toggle" onclick="toggleClockGlow()" class="px-2 py-0.5 bg-blue-600 hover:bg-blue-500 text-white text-[9px] font-bold rounded transition">Glow ON</button>
           </div>
         </div>
@@ -560,7 +546,7 @@
     </div>
   </div>
 
-  <!-- Google Calendar Config Modal (TROUBLESHOOTING ADDED) -->
+  <!-- Google Calendar Config Modal -->
   <div id="calendar-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 shadow-2xl text-slate-200">
       <div class="flex justify-between items-start mb-3">
@@ -581,7 +567,6 @@
           <textarea id="calendar-url-input" placeholder="Paste calendar iframe tag or public calendar link..." class="w-full h-16 bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-blue-500 placeholder-slate-700 font-mono"></textarea>
         </div>
 
-        <!-- Troubleshooting checklist -->
         <div class="bg-slate-950/40 border border-amber-500/10 rounded-xl p-2.5 text-[9px] text-amber-200/90 leading-normal space-y-1">
           <h4 class="font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-1"><i data-lucide="help-circle" class="w-3.5 h-3.5"></i> Events missing? Check these settings:</h4>
           <p>1. In Google Calendar sharing settings, you <strong>must</strong> check: <span class="underline">"Make available to public"</span>.</p>
@@ -672,7 +657,7 @@
     const STATE_KEY = "kitchen_command_state_v6";
     let appState = {
       theme: "dark", 
-      geminiApiKey: "", // User's self-provided key for live news/scores in self-hosted instances
+      geminiApiKey: "", 
       clock: {
         font: "sans", // sans, digital, elegant, display, cyber, imperial, handwriting, typewriter
         is24Hour: false,
@@ -721,12 +706,12 @@
     };
 
     const BACKGROUNDS = [
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1920&q=80", // Cozy warm kitchen
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80", // Pristine wilderness river
-      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80", // Moody morning valley fog
-      "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1920&q=80", // Sunlight filtering woodland
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80", // Serene warm seaside beach
-      "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?auto=format&fit=crop&w=1920&q=80"  // Deep green mountain pines
+      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1920&q=80", 
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80", 
+      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80", 
+      "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1920&q=80", 
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80", 
+      "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?auto=format&fit=crop&w=1920&q=80"
     ];
     let currentBgIdx = 0;
 
@@ -746,14 +731,39 @@
       
       lucide.createIcons();
 
-      // Continuous Execution intervals
+      // Core System Loops
       setInterval(updateClock, 1000);
       setInterval(updateCountdowns, 1000);
-      setInterval(cycleBackgrounds, 60000); // Crossfade dynamic scenery backgrounds every 60 seconds
-      setInterval(fetchDrydenWeather, 1800000); // Refresh weather every 30 minutes
-      setInterval(fetchLatestNews, 900000); // Refresh breaking news every 15 minutes
-      setInterval(fetchLatestSportsScores, 600000); // Refresh scores every 10 minutes
+      setInterval(cycleBackgrounds, 60000); 
+      setInterval(fetchDrydenWeather, 1800000); // 30 mins
+      setInterval(fetchLatestNews, 900000); // 15 mins
+      setInterval(fetchLatestSportsScores, 600000); // 10 mins
     });
+
+    function saveState() {
+      localStorage.setItem(STATE_KEY, JSON.stringify(appState));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem(STATE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          appState = {
+            ...appState,
+            ...parsed,
+            clock: { ...appState.clock, ...parsed.clock },
+            weather: { ...appState.weather, ...parsed.weather }
+          };
+        } catch (e) {
+          console.error("Error decoding state registry: ", e);
+        }
+      }
+      document.getElementById('family-notes').value = appState.notes;
+      if (appState.geminiApiKey) {
+        document.getElementById('gemini-api-key-input').value = appState.geminiApiKey;
+      }
+    }
 
     function saveGeminiApiKey() {
       const inputVal = document.getElementById('gemini-api-key-input').value.trim();
@@ -763,16 +773,55 @@
       fetchLatestSportsScores();
     }
 
+    function initTimeAndDate() {
+      updateClock();
+    }
+
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let seconds = now.getSeconds();
+      
+      let ampm = "";
+      if (!appState.clock.is24Hour) {
+        ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+      }
+      
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      seconds = seconds < 10 ? '0' + seconds : seconds;
+      
+      const sep = appState.clock.blinkingColon ? '<span class="colon-blink">:</span>' : ':';
+      
+      let timeHTML = `${hours}${sep}${minutes}`;
+      if (appState.clock.showSeconds) {
+        timeHTML += `${sep}${seconds}`;
+      }
+      
+      document.getElementById('live-time').innerHTML = timeHTML;
+      
+      const ampmBadge = document.getElementById('ampm-badge');
+      if (!appState.clock.is24Hour) {
+        ampmBadge.textContent = ampm;
+        ampmBadge.classList.remove('hidden');
+      } else {
+        ampmBadge.classList.add('hidden');
+      }
+
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', options);
+    }
+
     function applyClockStyles() {
       const clockEl = document.getElementById('live-time');
       const clockCard = document.getElementById('clock-container-card');
       const ampmBadge = document.getElementById('ampm-badge');
       
-      // 1. Reset Classes
       clockEl.className = "text-3xl md:text-4xl font-extrabold tracking-tight tabular-nums flex items-center transition-all duration-300";
       ampmBadge.className = "px-2 py-0.5 text-xs font-black tracking-wider uppercase border rounded-md transition-all duration-300";
       
-      // 2. Apply Custom Font Styles
       switch (appState.clock.font) {
         case 'sans': clockEl.classList.add('font-clock-sans'); break;
         case 'digital': clockEl.classList.add('font-clock-digital'); break;
@@ -784,7 +833,6 @@
         case 'typewriter': clockEl.classList.add('font-clock-typewriter'); break;
       }
 
-      // 3. Scale Sizing
       switch (appState.clock.size) {
         case 'compact':
           clockEl.classList.add('text-2xl');
@@ -797,7 +845,6 @@
           break;
       }
 
-      // 4. Color Theme Assignment
       let colorClass = "text-white";
       let borderClass = "border-white/20";
       let bgClass = "bg-white/5";
@@ -833,7 +880,6 @@
       clockEl.classList.add(colorClass);
       ampmBadge.classList.add(colorClass, borderClass, bgClass);
 
-      // 5. Apply Luminous Glows
       if (appState.clock.glow) {
         switch (appState.clock.color) {
           case 'white': clockEl.classList.add('clock-glow-white'); break;
@@ -844,7 +890,6 @@
         }
       }
 
-      // 6. Apply Clock housing Box plate
       clockCard.className = "flex items-center gap-3.5 min-w-[30%] rounded-xl transition-all duration-300";
       switch (appState.clock.bgStyle) {
         case 'none':
@@ -860,7 +905,6 @@
           break;
       }
 
-      // 7. Update format toggle statuses
       document.getElementById('clock-format-toggle').textContent = appState.clock.is24Hour ? "24H Mode" : "12H Mode";
       document.getElementById('clock-seconds-toggle').textContent = appState.clock.showSeconds ? "Visible" : "Hidden";
       document.getElementById('clock-blink-toggle').textContent = appState.clock.blinkingColon ? "Blinking" : "Static";
@@ -975,28 +1019,7 @@
       }
     }
 
-    function loadState() {
-      const saved = localStorage.getItem(STATE_KEY);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          appState = {
-            ...appState,
-            ...parsed,
-            clock: { ...appState.clock, ...parsed.clock },
-            weather: { ...appState.weather, ...parsed.weather }
-          };
-        } catch (e) {
-          console.error("Error decoding saved command center memory state: ", e);
-        }
-      }
-      document.getElementById('family-notes').value = appState.notes;
-      if (appState.geminiApiKey) {
-        document.getElementById('gemini-api-key-input').value = appState.geminiApiKey;
-      }
-    }
     async function fetchDrydenWeather() {
-      // 100% Free, Keyless Open-Meteo API specifically for Dryden, MI (Latitude 42.9475, Longitude -83.1258)
       const openMeteoUrl = "https://api.open-meteo.com/v1/forecast?latitude=42.9475&longitude=-83.1258&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto";
 
       try {
@@ -1010,7 +1033,6 @@
           const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
           const forecastList = [];
 
-          // Map the next 5 days of forecast
           for (let i = 0; i < 5; i++) {
             const dateObj = new Date(data.daily.time[i] + "T00:00:00");
             const dayName = daysOfWeek[dateObj.getDay()];
@@ -1040,7 +1062,6 @@
       }
     }
 
-    // Helper function to decode standard weather codes
     function mapWMOCodeToText(code) {
       if (code === 0) return "Sunny";
       if (code === 1 || code === 2) return "Partly Cloudy";
@@ -1102,7 +1123,6 @@
     async function fetchLatestNews() {
       const apiKey = appState.geminiApiKey || "";
       if (!apiKey) {
-        // Fallback: Realistically generate rotating local simulation if key is not pasted yet!
         const hour = new Date().getHours();
         let mockedFeeds = [];
         if (hour < 12) {
@@ -1166,7 +1186,6 @@
       const track = document.getElementById('marquee-track-content');
       track.innerHTML = "";
 
-      // Duplicate elements for infinite scrolling marquee
       const combinedNews = [...newsArray, ...newsArray];
       combinedNews.forEach(newsItem => {
         const span = document.createElement('span');
@@ -1179,7 +1198,6 @@
     async function fetchLatestSportsScores() {
       const apiKey = appState.geminiApiKey || "";
       if (!apiKey) {
-        // Fallback: Realistically generate rotating local games
         const simulatedGames = [
           { league: "MLB", team1: "Detroit Tigers", score1: 5, team2: "NY Yankees", score2: 4, status: "Final" },
           { league: "NBA", team1: "Detroit Pistons", score1: 104, team2: "Chicago Bulls", score2: 99, status: "Final" },
@@ -1235,77 +1253,6 @@
         }
       } catch (err) {
         console.warn("Failed retrieving latest sports scores. Using defaults.", err);
-      }
-    }
-
-    function renderNewsMarquee(newsArray) {
-      const track = document.getElementById('marquee-track-content');
-      track.innerHTML = "";
-
-      // Duplicate elements for infinite scrolling marquee
-      const combinedNews = [...newsArray, ...newsArray];
-      combinedNews.forEach(newsItem => {
-        const span = document.createElement('span');
-        span.className = "flex items-center gap-2 whitespace-nowrap text-slate-200 font-medium";
-        span.innerHTML = `<span>⚡</span> ${newsItem}`;
-        track.appendChild(span);
-      });
-    }
-
-    async function fetchLatestSportsScores() {
-      const apiKey = "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-      const systemPrompt = "You are a live sports scoreboard ticker. Search Google for today's live sports scores, recent results, or major game updates for US major leagues (NBA Playoffs, MLB, Soccer). Return strictly a JSON array of game objects matching the exact specified schema. Do not include markdown triple backticks.";
-      const userQuery = "Search for current live or latest MLB regular season scores, NBA playoff results, and active sporting tournaments.";
-
-      try {
-        const payload = {
-          contents: [{ parts: [{ text: userQuery }] }],
-          tools: [{ "google_search": {} }],
-          systemInstruction: {
-            parts: [{ text: systemPrompt }]
-          },
-          generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: "ARRAY",
-              items: {
-                type: "OBJECT",
-                properties: {
-                  league: { type: "STRING", description: "e.g., NBA, MLB, MLS, EPL" },
-                  team1: { type: "STRING" },
-                  score1: { type: "NUMBER" },
-                  team2: { type: "STRING" },
-                  score2: { type: "NUMBER" },
-                  status: { type: "STRING", description: "e.g. Q4 Live, Final, Bot 9th, 7:05 PM" }
-                },
-                required: ["league", "team1", "score1", "team2", "score2", "status"]
-              }
-            }
-          }
-        };
-
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (responseText) {
-          const sportsArray = JSON.parse(responseText.trim());
-          renderSportsScores(sportsArray);
-        }
-      } catch (err) {
-        console.warn("Failed retrieving latest sports scores. Using defaults.", err);
-        renderSportsScores([
-          { league: "MLB", team1: "Tigers", score1: 5, team2: "Yankees", score2: 3, status: "Final" },
-          { league: "NBA", team1: "Celtics", score1: 104, team2: "Pacers", score2: 98, status: "Final" },
-          { league: "MLB", team1: "Cubs", score1: 2, team2: "Cardinals", score2: 4, status: "Bot 8th" }
-        ]);
       }
     }
 
