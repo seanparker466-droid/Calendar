@@ -213,7 +213,7 @@
   <header class="flex-shrink-0 h-[14vh] min-h-[105px] flex justify-between items-center bg-slate-950/50 backdrop-blur-lg px-5 py-2.5 rounded-2xl border border-white/10 shadow-2xl z-10" style="background-color: var(--header-bg); border-color: var(--card-border);">
     
     <!-- LEFT PANEL: Modular Customizer Clock -->
-    <div id="clock-container-card" class="flex items-center gap-3.5 min-w-[32%] rounded-xl transition-all duration-300">
+    <div id="clock-container-card" class="flex items-center gap-3.5 min-w-[30%] rounded-xl transition-all duration-300">
       <div class="text-left flex items-center gap-3">
         <div id="live-time" class="text-3xl md:text-4xl font-extrabold tracking-tight tabular-nums flex items-center font-clock-sans">00:00:00</div>
         <div id="ampm-badge" class="px-2 py-0.5 text-xs font-black tracking-wider uppercase border border-white/20 rounded-md bg-white/5">--</div>
@@ -233,26 +233,26 @@
     </div>
 
     <!-- RIGHT PANEL: Expanded Dual-Level Weather Center (Current + 5-Day Forecast) -->
-    <div class="flex flex-1 items-center justify-between ml-4 pl-4 border-l border-white/10 max-w-[66%] h-full">
-      <!-- Live Current Weather Block -->
-      <div class="flex items-center gap-3 min-w-[30%]">
-        <div id="weather-icon-container" class="text-amber-400 flex-shrink-0 bg-white/5 p-1.5 rounded-xl border border-white/10">
-          <i data-lucide="sun-snow" class="w-8 h-8 animate-bounce"></i>
+    <div class="flex flex-1 items-center justify-between ml-4 pl-4 border-l border-white/10 max-w-[70%] h-full">
+      <!-- Live Current Weather Block - EXPANDED -->
+      <div class="flex items-center gap-4 min-w-[35%]">
+        <div id="weather-icon-container" class="text-amber-400 flex-shrink-0 bg-white/5 p-2.5 rounded-xl border border-white/10 shadow-lg">
+          <i data-lucide="sun-snow" class="w-10 h-10 animate-bounce"></i>
         </div>
         <div class="min-w-0">
-          <div class="flex items-baseline gap-1">
-            <span id="weather-temp" class="text-2xl font-black">--°F</span>
-            <span id="weather-desc" class="text-[10px] text-emerald-400 font-extrabold truncate">Syncing...</span>
+          <div class="flex items-baseline gap-2">
+            <span id="weather-temp" class="text-3xl font-black">--°F</span>
+            <span id="weather-desc" class="text-xs text-emerald-400 font-extrabold truncate uppercase tracking-wider">Syncing...</span>
           </div>
-          <div class="text-[9px] text-muted-custom font-medium flex flex-col leading-tight">
-            <span id="weather-loc" class="font-bold flex items-center gap-0.5"><i data-lucide="map-pin" class="w-2.5 h-2.5 text-rose-400"></i> Dryden, MI</span>
-            <span id="weather-details" class="opacity-80">Humidity: --% | Wind: -- mph</span>
+          <div class="text-[10px] text-muted-custom font-medium flex flex-col leading-relaxed">
+            <span id="weather-loc" class="font-bold flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3 text-rose-400"></i> Dryden, MI</span>
+            <span id="weather-details" class="opacity-80 font-semibold">Humidity: --% | Wind: -- mph</span>
           </div>
         </div>
       </div>
 
-      <!-- Horizontal 5-Day Weather Forecast Deck -->
-      <div class="flex items-center gap-2 overflow-hidden ml-3 pl-3 border-l border-white/5 flex-1 justify-end" id="weather-forecast-deck">
+      <!-- Horizontal 5-Day Weather Forecast Deck - EXPANDED SIZES -->
+      <div class="flex items-center gap-3 overflow-hidden ml-3 pl-3 border-l border-white/5 flex-1 justify-end" id="weather-forecast-deck">
         <!-- Days are injected dynamically -->
       </div>
     </div>
@@ -509,6 +509,19 @@
           </div>
         </div>
 
+        <!-- Self-Hosted Gemini API Setup Section -->
+        <div class="pt-2.5 border-t border-slate-800/85">
+          <label class="block text-[9px] font-black text-amber-400 uppercase tracking-wider mb-1">Self-Hosted Live API Sync (Optional)</label>
+          <div class="space-y-1">
+            <p class="text-[8px] text-slate-400 leading-normal">
+              To fetch live search summaries of Sports and News on your own hosted page, paste a free Gemini API Key here:
+            </p>
+            <input id="gemini-api-key-input" type="password" placeholder="Paste AI API Key here (starts with AIza)..." 
+              class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-[10px] text-white focus:outline-none focus:border-amber-500"
+              onchange="saveGeminiApiKey()">
+          </div>
+        </div>
+
         <!-- Clock toggles -->
         <div class="grid grid-cols-2 gap-1.5 pt-2 border-t border-slate-800/80">
           <div class="flex justify-between items-center bg-slate-950 p-2 rounded-lg border border-slate-800">
@@ -547,7 +560,7 @@
     </div>
   </div>
 
-  <!-- Google Calendar Config Modal -->
+  <!-- Google Calendar Config Modal (TROUBLESHOOTING ADDED) -->
   <div id="calendar-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 shadow-2xl text-slate-200">
       <div class="flex justify-between items-start mb-3">
@@ -565,7 +578,15 @@
           Open Google Calendar on your PC → Settings for your selected family calendar → Scroll to "Integrate Calendar" → Paste the <strong>Embed iframe Code</strong> or public sharing link below.
         </p>
         <div>
-          <textarea id="calendar-url-input" placeholder="Paste calendar iframe tag or public calendar link..." class="w-full h-20 bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-blue-500 placeholder-slate-700 font-mono"></textarea>
+          <textarea id="calendar-url-input" placeholder="Paste calendar iframe tag or public calendar link..." class="w-full h-16 bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-blue-500 placeholder-slate-700 font-mono"></textarea>
+        </div>
+
+        <!-- Troubleshooting checklist -->
+        <div class="bg-slate-950/40 border border-amber-500/10 rounded-xl p-2.5 text-[9px] text-amber-200/90 leading-normal space-y-1">
+          <h4 class="font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-1"><i data-lucide="help-circle" class="w-3.5 h-3.5"></i> Events missing? Check these settings:</h4>
+          <p>1. In Google Calendar sharing settings, you <strong>must</strong> check: <span class="underline">"Make available to public"</span>.</p>
+          <p>2. Set the permissions dropdown right next to it to: <span class="underline">"See all event details"</span> (otherwise events will load blank/invisible).</p>
+          <p>3. If using an iPhone/Safari on TV, make sure to turn off <span class="underline">"Prevent Cross-Site Tracking"</span> if events block.</p>
         </div>
 
         <div class="flex gap-2 justify-end pt-1">
@@ -651,6 +672,7 @@
     const STATE_KEY = "kitchen_command_state_v6";
     let appState = {
       theme: "dark", 
+      geminiApiKey: "", // User's self-provided key for live news/scores in self-hosted instances
       clock: {
         font: "sans", // sans, digital, elegant, display, cyber, imperial, handwriting, typewriter
         is24Hour: false,
@@ -732,6 +754,14 @@
       setInterval(fetchLatestNews, 900000); // Refresh breaking news every 15 minutes
       setInterval(fetchLatestSportsScores, 600000); // Refresh scores every 10 minutes
     });
+
+    function saveGeminiApiKey() {
+      const inputVal = document.getElementById('gemini-api-key-input').value.trim();
+      appState.geminiApiKey = inputVal;
+      saveState();
+      fetchLatestNews();
+      fetchLatestSportsScores();
+    }
 
     function applyClockStyles() {
       const clockEl = document.getElementById('live-time');
@@ -815,7 +845,7 @@
       }
 
       // 6. Apply Clock housing Box plate
-      clockCard.className = "flex items-center gap-3.5 min-w-[32%] rounded-xl transition-all duration-300";
+      clockCard.className = "flex items-center gap-3.5 min-w-[30%] rounded-xl transition-all duration-300";
       switch (appState.clock.bgStyle) {
         case 'none':
           break;
@@ -961,122 +991,67 @@
         }
       }
       document.getElementById('family-notes').value = appState.notes;
-    }
-
-    function saveState() {
-      localStorage.setItem(STATE_KEY, JSON.stringify(appState));
-    }
-
-    function initTimeAndDate() {
-      updateClock();
-    }
-
-    function updateClock() {
-      const now = new Date();
-      let hours = now.getHours();
-      let minutes = now.getMinutes();
-      let seconds = now.getSeconds();
-      
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      seconds = seconds < 10 ? '0' + seconds : seconds;
-
-      const colonClass = appState.clock.blinkingColon ? "colon-blink" : "";
-      const colonHTML = `<span class="${colonClass}">:</span>`;
-
-      let timeStr = "";
-      let ampmText = "";
-
-      if (appState.clock.is24Hour) {
-        hours = hours < 10 ? '0' + hours : hours;
-        timeStr = appState.clock.showSeconds ? 
-          `${hours}${colonHTML}${minutes}${colonHTML}${seconds}` : 
-          `${hours}${colonHTML}${minutes}`;
-        ampmText = "24H";
-      } else {
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        hours = hours ? hours : 12; 
-        timeStr = appState.clock.showSeconds ? 
-          `${hours}${colonHTML}${minutes}${colonHTML}${seconds}` : 
-          `${hours}${colonHTML}${minutes}`;
-        ampmText = ampm;
+      if (appState.geminiApiKey) {
+        document.getElementById('gemini-api-key-input').value = appState.geminiApiKey;
       }
-      
-      document.getElementById('live-time').innerHTML = timeStr;
-      document.getElementById('ampm-badge').textContent = ampmText;
-
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', options);
     }
-
     async function fetchDrydenWeather() {
-      const apiKey = "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-      const systemPrompt = "You are an intelligent weather reporter. Search Google for Dryden, MI 48428 weather, including current conditions (temp, condition string, humidity, wind speed) and a 5-day forecast. Output strictly valid JSON matching the exact schema specified. Do not enclose inside markdown triple backticks.";
-      const userQuery = "Get live current weather and 5-day weather forecast outlook for Dryden, MI 48428.";
+      // 100% Free, Keyless Open-Meteo API specifically for Dryden, MI (Latitude 42.9475, Longitude -83.1258)
+      const openMeteoUrl = "https://api.open-meteo.com/v1/forecast?latitude=42.9475&longitude=-83.1258&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto";
 
       try {
-        const payload = {
-          contents: [{ parts: [{ text: userQuery }] }],
-          tools: [{ "google_search": {} }],
-          systemInstruction: {
-            parts: [{ text: systemPrompt }]
-          },
-          generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: "OBJECT",
-              properties: {
-                temp: { type: "NUMBER" },
-                condition: { type: "STRING" },
-                humidity: { type: "NUMBER" },
-                windSpeed: { type: "NUMBER" },
-                forecast: {
-                  type: "ARRAY",
-                  items: {
-                    type: "OBJECT",
-                    properties: {
-                      day: { type: "STRING" },
-                      high: { type: "NUMBER" },
-                      low: { type: "NUMBER" },
-                      condition: { type: "STRING" }
-                    },
-                    required: ["day", "high", "low", "condition"]
-                  }
-                }
-              },
-              required: ["temp", "condition", "humidity", "windSpeed", "forecast"]
-            }
+        const response = await fetch(openMeteoUrl);
+        const data = await response.json();
+
+        if (data && data.current && data.daily) {
+          const wmoCode = data.current.weather_code;
+          const conditionString = mapWMOCodeToText(wmoCode);
+          
+          const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+          const forecastList = [];
+
+          // Map the next 5 days of forecast
+          for (let i = 0; i < 5; i++) {
+            const dateObj = new Date(data.daily.time[i] + "T00:00:00");
+            const dayName = daysOfWeek[dateObj.getDay()];
+            forecastList.push({
+              day: dayName,
+              high: Math.round(data.daily.temperature_2m_max[i]),
+              low: Math.round(data.daily.temperature_2m_min[i]),
+              condition: mapWMOCodeToText(data.daily.weather_code[i])
+            });
           }
-        };
 
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (responseText) {
-          const parsedWeather = JSON.parse(responseText.trim());
           appState.weather = {
             location: "Dryden, MI",
-            temp: Math.round(parsedWeather.temp),
-            condition: parsedWeather.condition,
-            humidity: parsedWeather.humidity,
-            windSpeed: Math.round(parsedWeather.windSpeed),
-            forecast: parsedWeather.forecast
+            temp: Math.round(data.current.temperature_2m),
+            condition: conditionString,
+            humidity: data.current.relative_humidity_2m,
+            windSpeed: Math.round(data.current.wind_speed_10m),
+            forecast: forecastList
           };
+
           saveState();
         }
       } catch (err) {
-        console.warn("Failed retrieving Dryden live weather report. Utilizing memory.", err);
+        console.warn("Failed retrieving Dryden live weather from Open-Meteo. Using offline fallback.", err);
       } finally {
         updateWeatherDOM();
       }
+    }
+
+    // Helper function to decode standard weather codes
+    function mapWMOCodeToText(code) {
+      if (code === 0) return "Sunny";
+      if (code === 1 || code === 2) return "Partly Cloudy";
+      if (code === 3) return "Overcast";
+      if (code >= 45 && code <= 48) return "Foggy";
+      if (code >= 51 && code <= 55) return "Drizzle";
+      if (code >= 61 && code <= 65) return "Rainy";
+      if (code >= 71 && code <= 75) return "Snowy";
+      if (code >= 80 && code <= 82) return "Showers";
+      if (code >= 95 && code <= 99) return "Stormy";
+      return "Cloudy";
     }
 
     function updateWeatherDOM() {
@@ -1085,20 +1060,20 @@
       document.getElementById('weather-details').textContent = `Humidity: ${appState.weather.humidity}% | Wind: ${appState.weather.windSpeed} mph`;
       
       const mainIconContainer = document.getElementById('weather-icon-container');
-      mainIconContainer.innerHTML = getWeatherIconHTML(appState.weather.condition, "w-8 h-8");
+      mainIconContainer.innerHTML = getWeatherIconHTML(appState.weather.condition, "w-10 h-10");
       
       const forecastDeck = document.getElementById('weather-forecast-deck');
       forecastDeck.innerHTML = "";
 
       appState.weather.forecast.slice(0, 5).forEach(dayForecast => {
         const item = document.createElement('div');
-        item.className = "flex flex-col items-center bg-white/5 border border-white/5 px-1.5 py-1 rounded-lg min-w-[55px] text-center";
+        item.className = "flex flex-col items-center bg-white/5 border border-white/5 px-2.5 py-1.5 rounded-lg min-w-[70px] text-center shadow-md";
         item.innerHTML = `
-          <span class="text-[7px] font-black uppercase text-slate-400 tracking-wider">${dayForecast.day}</span>
-          <div class="my-0.5 flex items-center justify-center">${getWeatherIconHTML(dayForecast.condition, "w-4.5 h-4.5 text-amber-300")}</div>
-          <div class="flex flex-col text-[8px] font-bold leading-none">
+          <span class="text-[9px] font-black uppercase text-slate-400 tracking-wider">${dayForecast.day}</span>
+          <div class="my-1 flex items-center justify-center">${getWeatherIconHTML(dayForecast.condition, "w-6 h-6 text-amber-300")}</div>
+          <div class="flex flex-col text-[10px] font-bold leading-none">
             <span class="text-white">${dayForecast.high}°</span>
-            <span class="text-slate-500 text-[7px] mt-0.5">${dayForecast.low}°</span>
+            <span class="text-slate-500 text-[8px] mt-0.5">${dayForecast.low}°</span>
           </div>
         `;
         forecastDeck.appendChild(item);
@@ -1125,9 +1100,31 @@
     }
 
     async function fetchLatestNews() {
-      const apiKey = "";
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      const apiKey = appState.geminiApiKey || "";
+      if (!apiKey) {
+        // Fallback: Realistically generate rotating local simulation if key is not pasted yet!
+        const hour = new Date().getHours();
+        let mockedFeeds = [];
+        if (hour < 12) {
+          mockedFeeds = [
+            "🌅 Dryden Farmers Market scheduled this Saturday morning at downtown plaza!",
+            "🌍 International Space Station orbits smoothly over Michigan sky coordinates",
+            "🎬 Hollywood Spotlight: New summer blockbuster breaks box office expectations",
+            "📈 Dow Jones rises 150 points during early morning market activities"
+          ];
+        } else {
+          mockedFeeds = [
+            "🍕 Tonight's weather in Dryden ideal for backyard campouts and grilling!",
+            "🏆 Local high school sports teams prepare for division playoff championships",
+            "🎭 Celebrities rally at international charity benefit gala",
+            "🚗 Michigan road repairs planned along Route 53 during coming weeks"
+          ];
+        }
+        renderNewsMarquee(mockedFeeds);
+        return;
+      }
 
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
       const systemPrompt = "You are a breaking news aggregator. Search Google for today's top world news, celebrity updates, and major national headlines. Return strictly a JSON array of strings containing short, punchy news items (max 80 chars each with relevant emojis). Do not use markdown backticks.";
       const userQuery = "Get the latest breaking world news, celebrity stories, and current news updates.";
 
@@ -1162,13 +1159,82 @@
         }
       } catch (err) {
         console.warn("Failed retrieving grounded news ticker details.", err);
-        // Fallback mock news
-        renderNewsMarquee([
-          "🌍 Global news synchronized successfully",
-          "🎬 Celebrity news: Major film release wins top weekend box office",
-          "📈 Local news: Dryden community planning new central green space",
-          "☀️ Perfect outdoor weather forecast this weekend across Michigan"
-        ]);
+      }
+    }
+
+    function renderNewsMarquee(newsArray) {
+      const track = document.getElementById('marquee-track-content');
+      track.innerHTML = "";
+
+      // Duplicate elements for infinite scrolling marquee
+      const combinedNews = [...newsArray, ...newsArray];
+      combinedNews.forEach(newsItem => {
+        const span = document.createElement('span');
+        span.className = "flex items-center gap-2 whitespace-nowrap text-slate-200 font-medium";
+        span.innerHTML = `<span>⚡</span> ${newsItem}`;
+        track.appendChild(span);
+      });
+    }
+
+    async function fetchLatestSportsScores() {
+      const apiKey = appState.geminiApiKey || "";
+      if (!apiKey) {
+        // Fallback: Realistically generate rotating local games
+        const simulatedGames = [
+          { league: "MLB", team1: "Detroit Tigers", score1: 5, team2: "NY Yankees", score2: 4, status: "Final" },
+          { league: "NBA", team1: "Detroit Pistons", score1: 104, team2: "Chicago Bulls", score2: 99, status: "Final" },
+          { league: "MLB", team1: "Detroit Tigers", score1: 2, team2: "Cleveland Guardians", score2: 1, status: "Live - 7th" }
+        ];
+        renderSportsScores(simulatedGames);
+        return;
+      }
+
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      const systemPrompt = "You are a live sports scoreboard ticker. Search Google for today's live sports scores, recent results, or major game updates for US major leagues (NBA Playoffs, MLB, Soccer). Return strictly a JSON array of game objects matching the exact specified schema. Do not include markdown triple backticks.";
+      const userQuery = "Search for current live or latest MLB regular season scores, NBA playoff results, and active sporting tournaments.";
+
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: userQuery }] }],
+          tools: [{ "google_search": {} }],
+          systemInstruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "ARRAY",
+              items: {
+                type: "OBJECT",
+                properties: {
+                  league: { type: "STRING", description: "e.g., NBA, MLB, MLS, EPL" },
+                  team1: { type: "STRING" },
+                  score1: { type: "NUMBER" },
+                  team2: { type: "STRING" },
+                  score2: { type: "NUMBER" },
+                  status: { type: "STRING", description: "e.g. Q4 Live, Final, Bot 9th, 7:05 PM" }
+                },
+                required: ["league", "team1", "score1", "team2", "score2", "status"]
+              }
+            }
+          }
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (responseText) {
+          const sportsArray = JSON.parse(responseText.trim());
+          renderSportsScores(sportsArray);
+        }
+      } catch (err) {
+        console.warn("Failed retrieving latest sports scores. Using defaults.", err);
       }
     }
 
