@@ -114,14 +114,9 @@
       50% { opacity: 0.5; transform: scale(0.95); }
     }
 
-    @keyframes scroll-marquee {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(-50%, 0, 0); }
-    }
     .marquee-track {
-      display: flex; width: max-content; animation: scroll-marquee 100s linear infinite; will-change: transform; transform: translateZ(0);
+      display: flex; width: max-content; transform: translateX(0);
     }
-    .marquee-container:hover .marquee-track { animation-play-state: paused; }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
@@ -1015,16 +1010,32 @@
       ]);
     }
 
+    let _mqRAF = null, _mqX = 0;
     function renderNewsMarquee(newsArray) {
-      const track = document.getElementById('marquee-track-content'); track.innerHTML = "";
-      const doubled = [...newsArray, ...newsArray];
-      doubled.forEach(item => {
+      const track = document.getElementById('marquee-track-content');
+      track.innerHTML = "";
+      const build = arr => arr.forEach(item => {
         const isObj = typeof item === 'object';
         const title = isObj ? item.title : item;
         const label = isObj ? item.label : '';
         const color = isObj ? item.color : '#94a3b8';
-        const badge = label ? `<span class="text-[10px] font-black px-1.5 py-0.5 rounded mr-1" style="color:${color};border:1px solid ${color}44;background:${color}18">${label}</span>` : '<span class="text-slate-500">•</span>';
-        track.innerHTML += `<span class="flex items-center gap-2 whitespace-nowrap text-slate-100 font-semibold pl-8">${badge}<span class="text-slate-200">${title}</span></span>`;
+        const badge = label ? `<span class="text-[10px] font-black px-1.5 py-0.5 rounded mr-1 flex-shrink-0" style="color:${color};border:1px solid ${color}44;background:${color}18">${label}</span>` : '<span class="text-slate-500 mr-2">•</span>';
+        track.innerHTML += `<span class="flex items-center whitespace-nowrap text-slate-100 font-semibold" style="padding-left:40px">${badge}<span class="text-slate-200">${title}</span></span>`;
+      });
+      build(newsArray); build(newsArray);
+      if (_mqRAF) cancelAnimationFrame(_mqRAF);
+      _mqX = 0; track.style.transform = 'translateX(0px)';
+      requestAnimationFrame(() => {
+        const half = track.offsetWidth / 2;
+        const cont = track.closest('.marquee-container');
+        let paused = false;
+        cont.addEventListener('mouseenter', () => paused = true, { passive: true });
+        cont.addEventListener('mouseleave', () => paused = false, { passive: true });
+        const step = () => {
+          if (!paused) { _mqX -= 0.5; if (Math.abs(_mqX) >= half) _mqX = 0; track.style.transform = `translateX(${_mqX}px)`; }
+          _mqRAF = requestAnimationFrame(step);
+        };
+        _mqRAF = requestAnimationFrame(step);
       });
     }
 
@@ -1210,47 +1221,62 @@
     // ── Google Calendar iCal sync ─────────────────────────────────────────────
     async function fetchCalendarEvents() {
       if (!appState.icalUrl) return;
-      try {
-        const res = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(appState.icalUrl));
-        if (!res.ok) throw new Error('fetch failed');
-        const icsText = await res.text();
-        const gcalEvents = parseICS(icsText);
-        if (!gcalEvents.length) return;
-        // Remove old synced events, keep manually added ones
-        appState.todayEvents = (appState.todayEvents || []).filter(e => !e.fromGcal);
-        gcalEvents.forEach(ev => {
-          appState.todayEvents.push({ id: "gcal-" + ev.uid, title: ev.summary, date: ev.dateStr, time: ev.timeStr, note: ev.location || '', category: 'family', fromGcal: true });
-        });
-        saveState();
-        renderTodaySchedule();
-      } catch(e) { console.warn('iCal sync failed:', e); }
+      const proxies = [
+        u => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
+        u => "https://corsproxy.io/?" + encodeURIComponent(u),
+      ];
+      let icsText = null;
+      for (const proxy of proxies) {
+        try {
+          const res = await fetch(proxy(appState.icalUrl), { cache: 'no-store' });
+          if (!res.ok) continue;
+          const txt = await res.text();
+          if (txt.includes('BEGIN:VCALENDAR')) { icsText = txt; break; }
+        } catch(e) {}
+      }
+      if (!icsText) { console.warn('iCal: no valid response'); return; }
+      const gcalEvents = parseICS(icsText);
+      appState.todayEvents = (appState.todayEvents || []).filter(e => !e.fromGcal);
+      gcalEvents.forEach(ev => {
+        appState.todayEvents.push({ id: "gcal-" + ev.uid, title: ev.summary, date: ev.dateStr, time: ev.timeStr, note: ev.location || '', category: 'family', fromGcal: true });
+      });
+      saveState();
+      renderTodaySchedule();
     }
 
     function parseICS(text) {
       const results = [];
       const today = new Date(); today.setHours(0,0,0,0);
       const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
-      const blocks = text.split('BEGIN:VEVENT'); blocks.shift();
+      // Unfold ICS continuation lines (lines starting with space/tab)
+      const unfolded = text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '');
+      const blocks = unfolded.split('BEGIN:VEVENT'); blocks.shift();
       for (const block of blocks) {
         try {
-          const get = key => { const m = block.match(new RegExp(key + '[^:]*:([^\r\n]+')); return m ? m[1].trim() : ''; };
-          const summary = get('SUMMARY').replace(/\\n/g,' ').replace(/\\,/g,',') || 'Untitled';
-          const uid = get('UID') || Math.random().toString(36).slice(2);
-          const location = get('LOCATION').replace(/\\,/g,',');
-          const dtstart = get('DTSTART'); if (!dtstart) continue;
-          let evDate, timeStr = '00:00';
-          if (dtstart.length === 8) {
-            evDate = new Date(+dtstart.slice(0,4), +dtstart.slice(4,6)-1, +dtstart.slice(6,8));
+          const get = key => {
+            const m = block.match(new RegExp('^' + key + '[;:][^\r\n]*:([^\r\n]+)', 'm'));
+            if (m) return m[1].trim();
+            const m2 = block.match(new RegExp('^' + key + ':([^\r\n]+)', 'm'));
+            return m2 ? m2[1].trim() : '';
+          };
+          const summary  = (get('SUMMARY') || 'Untitled').replace(/\\n/g,' ').replace(/\\,/g,',').replace(/\\;/g,';');
+          const uid      = get('UID') || ('r' + Math.random().toString(36).slice(2));
+          const location = (get('LOCATION') || '').replace(/\\,/g,',');
+          const dtRaw = get('DTSTART'); if (!dtRaw) continue;
+          const dtClean = dtRaw.split(/[; ]/)[0].replace('Z','');
+          const isUTC = dtRaw.endsWith('Z'), isDate = dtClean.length === 8;
+          let evDate;
+          if (isDate) {
+            evDate = new Date(+dtClean.slice(0,4), +dtClean.slice(4,6)-1, +dtClean.slice(6,8));
+          } else if (isUTC) {
+            evDate = new Date(Date.UTC(+dtClean.slice(0,4),+dtClean.slice(4,6)-1,+dtClean.slice(6,8),+dtClean.slice(9,11),+dtClean.slice(11,13)));
           } else {
-            const c = dtstart.replace('Z','');
-            const d = dtstart.endsWith('Z')
-              ? new Date(Date.UTC(+c.slice(0,4),+c.slice(4,6)-1,+c.slice(6,8),+c.slice(9,11),+c.slice(11,13)))
-              : new Date(+c.slice(0,4),+c.slice(4,6)-1,+c.slice(6,8),+c.slice(9,11),+c.slice(11,13));
-            evDate = d;
-            timeStr = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+            evDate = new Date(+dtClean.slice(0,4),+dtClean.slice(4,6)-1,+dtClean.slice(6,8),+dtClean.slice(9,11),+dtClean.slice(11,13));
           }
+          if (isNaN(evDate.getTime())) continue;
           const evDay = new Date(evDate); evDay.setHours(0,0,0,0);
           if (evDay < today || evDay >= tomorrow) continue;
+          const timeStr = isDate ? '00:00' : String(evDate.getHours()).padStart(2,'0')+':'+String(evDate.getMinutes()).padStart(2,'0');
           const dateStr = evDay.toISOString().slice(0,10);
           results.push({ uid, summary, dateStr, timeStr, location });
         } catch(e) {}
