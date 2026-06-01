@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kitchen Command Center TV</title>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#060913">
+  <link rel="manifest" id="pwa-manifest">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800;900&family=Share+Tech+Mono&family=Playfair+Display:ital,wght=0,700;0,900;1,700&family=Lexend+Deca:wght=700;900&family=Orbitron:wght=700;900&family=Cinzel:wght=700;900&family=Caveat:wght=700&family=Courier+Prime:wght=700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -118,6 +122,7 @@
       display: flex; width: max-content; transform: translateX(0);
     }
 
+    :fullscreen, :-webkit-full-screen { background: var(--bg-color); }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
     ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
@@ -176,6 +181,9 @@
             </button>
             <button onclick="openCustomizerModal()" class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all flex items-center justify-center text-blue-400" title="Clock Design Studio">
               <i data-lucide="palette" class="w-4 h-4"></i>
+            </button>
+            <button onclick="toggleFullscreen()" id="fullscreen-btn" class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all flex items-center justify-center text-slate-400" title="Toggle Fullscreen">
+              <i data-lucide="maximize" class="w-4 h-4"></i>
             </button>
           </div>
         </div>
@@ -491,7 +499,9 @@
           <p class="text-xs text-slate-500 mb-2">Google Calendar → Settings → Integrate Calendar → copy <strong class="text-slate-300">Secret address in iCal format</strong> — this pulls events into Today's Schedule automatically</p>
           <input id="ical-url-input" type="text" placeholder="https://calendar.google.com/calendar/ical/.../.../basic.ics" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 font-mono">
         </div>
+        <div id="ical-debug" class="hidden text-xs font-mono bg-black/40 border border-white/10 rounded-xl p-3 text-slate-300 max-h-20 overflow-y-auto"></div>
         <div class="flex gap-3 justify-end pt-2">
+          <button onclick="testIcalUrl()" class="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm font-bold rounded-xl transition">Test Connection</button>
           <button onclick="closeCalendarSettings()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold rounded-xl transition">Cancel</button>
           <button onclick="saveCalendarUrl()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl shadow-md transition">Save & Sync</button>
         </div>
@@ -1211,6 +1221,27 @@
     function saveMealPlan() { const i = document.getElementById('meal-modal-day-idx').value; appState.mealPlan[i] = { day: appState.mealPlan[i].day, breakfast: document.getElementById('meal-input-breakfast').value, lunch: document.getElementById('meal-input-lunch').value, dinner: document.getElementById('meal-input-dinner').value }; saveState(); renderMealPlan(); closeMealModal(); }
     function resetWeeklyMeals() { appState.mealPlan = appState.mealPlan.map(m => ({ day: m.day, breakfast: "", lunch: "", dinner: "" })); saveState(); renderMealPlan(); }
     
+    function toggleFullscreen() {
+      const el = document.documentElement;
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        (el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen).call(el);
+      } else {
+        (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen).call(document);
+      }
+    }
+    document.addEventListener('fullscreenchange', () => {
+      const btn = document.getElementById('fullscreen-btn'); if (!btn) return;
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      btn.innerHTML = isFs ? '<i data-lucide="minimize" class="w-4 h-4"></i>' : '<i data-lucide="maximize" class="w-4 h-4"></i>';
+      btn.title = isFs ? 'Exit Fullscreen' : 'Enter Fullscreen';
+      lucide.createIcons();
+    });
+    (function(){
+      const m={name:"Parker Family Command Center",short_name:"Command Center",start_url:".",display:"fullscreen",background_color:"#060913",theme_color:"#060913",orientation:"landscape"};
+      const b=new Blob([JSON.stringify(m)],{type:'application/json'});
+      const el=document.getElementById('pwa-manifest');if(el)el.href=URL.createObjectURL(b);
+    })();
+
     function saveNotes() { appState.notes = document.getElementById('family-notes').value; saveState(); }
     function clearAllNotes() { document.getElementById('family-notes').value = ""; appState.notes = ""; saveState(); }
     function openSportsSettingsModal() { document.getElementById('sports-settings-modal').classList.remove('hidden'); }
@@ -1292,7 +1323,11 @@
       if (!container) return;
       container.innerHTML = "";
 
-      const todayEvents = (appState.todayEvents || []).filter(e => new Date(e.date).toDateString() === todayStr);
+      const todayEvents = (appState.todayEvents || []).filter(e => {
+        if (!e.date) return false;
+        const [y,mo,d] = e.date.split('-').map(Number);
+        return new Date(y, mo-1, d).toDateString() === todayStr;
+      });
       todayEvents.sort((a, b) => a.time.localeCompare(b.time));
 
       if (!todayEvents.length) {
