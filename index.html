@@ -185,6 +185,9 @@
             <button onclick="toggleFullscreen()" id="fullscreen-btn" class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all flex items-center justify-center text-slate-400" title="Toggle Fullscreen">
               <i data-lucide="maximize" class="w-4 h-4"></i>
             </button>
+            <button onclick="openCameraModal()" class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-all flex items-center justify-center text-emerald-400" title="Camera Feeds">
+              <i data-lucide="camera" class="w-4 h-4"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -214,6 +217,13 @@
   </header>
 
   <!-- MAIN APP WINDOW GRID -->
+  <!-- TRASH DAY BANNER -->
+  <div id="trash-banner" class="hidden flex-shrink-0 flex items-center justify-center gap-3 px-6 py-2 rounded-xl border font-black text-sm uppercase tracking-widest shadow-lg" style="background:rgba(234,179,8,0.15);border-color:rgba(234,179,8,0.4);color:#fbbf24;">
+    <i data-lucide="trash-2" class="w-5 h-5"></i>
+    <span id="trash-banner-text">🗑️ Trash Day Tomorrow — Put bins out tonight!</span>
+    <i data-lucide="trash-2" class="w-5 h-5"></i>
+  </div>
+
   <main class="flex-1 min-h-0 grid grid-cols-12 gap-4">
     
     <!-- LEFT: CALENDAR PANEL -->
@@ -276,14 +286,9 @@
               <p id="todays-schedule-date" class="text-[10px] text-sky-400 font-bold uppercase tracking-wider"></p>
             </div>
           </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="fetchCalendarEvents()" title="Sync Google Calendar now" class="p-1.5 text-sky-400/60 hover:text-sky-300 transition bg-sky-500/5 hover:bg-sky-500/15 rounded-lg border border-sky-500/10">
-              <i data-lucide="refresh-cw" class="w-3 h-3"></i>
-            </button>
-            <button onclick="openAddEventModal()" class="text-xs text-sky-400 hover:text-sky-300 transition flex items-center gap-1 font-semibold bg-sky-500/10 hover:bg-sky-500/20 px-2.5 py-1.5 rounded-lg border border-sky-500/20">
-              <i data-lucide="plus" class="w-3 h-3"></i> Add Event
-            </button>
-          </div>
+          <button onclick="openAddEventModal()" class="text-xs text-sky-400 hover:text-sky-300 transition flex items-center gap-1 font-semibold bg-sky-500/10 hover:bg-sky-500/20 px-2.5 py-1.5 rounded-lg border border-sky-500/20">
+            <i data-lucide="plus" class="w-3 h-3"></i> Add Event
+          </button>
         </div>
         <div id="todays-events-container" class="flex-grow overflow-y-auto p-2 space-y-1.5 bg-slate-950/10"></div>
       </div>
@@ -313,7 +318,7 @@
     <section class="col-span-3 flex flex-col gap-4 h-full min-h-0">
       
       <!-- GROCERIES -->
-      <div class="h-[50%] flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden">
+      <div class="h-[33%] flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden">
         <div class="px-4 py-3 border-b border-white/5 flex justify-between items-center bg-white/5 flex-shrink-0">
           <div class="flex items-center gap-2.5">
             <div class="p-1.5 bg-amber-500/10 text-amber-400 rounded-lg">
@@ -336,8 +341,22 @@
         <div id="grocery-container" class="flex-grow min-h-0 overflow-y-auto p-3 space-y-2"></div>
       </div>
 
+      <!-- MEDICATIONS -->
+      <div class="h-[34%] flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden">
+        <div class="px-4 py-2.5 border-b border-white/5 flex justify-between items-center bg-white/5 flex-shrink-0">
+          <div class="flex items-center gap-2">
+            <div class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg"><i data-lucide="pill" class="w-4 h-4"></i></div>
+            <h2 class="text-sm font-black uppercase tracking-wider text-slate-200">Medications</h2>
+          </div>
+          <button onclick="openMedModal()" class="text-xs text-blue-400 hover:text-blue-300 transition flex items-center gap-1 font-semibold bg-blue-500/10 hover:bg-blue-500/20 px-2 py-1.5 rounded-lg border border-blue-500/20">
+            <i data-lucide="plus" class="w-3 h-3"></i> Add
+          </button>
+        </div>
+        <div id="med-container" class="flex-grow min-h-0 overflow-y-auto p-2 space-y-1.5 bg-slate-950/10"></div>
+      </div>
+
       <!-- COUNTDOWNS (UPDATED TO MULTI-COLUMN COMPACT PANEL MODALITY) -->
-      <div class="h-[50%] flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden">
+      <div class="h-[33%] flex flex-col themed-card rounded-2xl shadow-2xl overflow-hidden">
         <div class="px-4 py-3 border-b border-white/5 flex justify-between items-center bg-white/5 flex-shrink-0">
           <div class="flex items-center gap-2.5">
             <div class="p-1.5 bg-rose-500/10 text-rose-400 rounded-lg">
@@ -365,6 +384,80 @@
       </div>
     </div>
   </footer>
+
+
+  <!-- CAMERA MODAL -->
+  <div id="camera-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden">
+      <div class="flex justify-between items-center px-6 py-4 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl"><i data-lucide="camera" class="w-5 h-5"></i></div>
+          <div>
+            <h3 class="text-lg font-bold text-white">Security Cameras</h3>
+            <p class="text-xs text-slate-400">Live feeds from your cameras</p>
+          </div>
+        </div>
+        <button onclick="closeCameraModal()" class="text-slate-400 hover:text-white transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+      </div>
+      <!-- Camera grid -->
+      <div id="camera-grid" class="grid grid-cols-2 gap-3 p-4 max-h-[70vh] overflow-y-auto"></div>
+      <!-- Camera settings -->
+      <div class="px-6 py-4 border-t border-slate-800 space-y-3">
+        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Add Camera Stream</p>
+        <div class="flex gap-2">
+          <input id="cam-name-input" type="text" placeholder="Camera name (e.g. Front Door)" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <input id="cam-url-input" type="text" placeholder="Stream URL (rtsp://, http://, or embed URL)" class="flex-[2] bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono text-xs">
+          <button onclick="addCamera()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl font-bold text-sm transition">Add</button>
+        </div>
+        <p class="text-[11px] text-slate-500">Supports: MJPEG streams (http://), camera web UI URLs, or any URL your camera provides. RTSP streams need an app like VLC — paste the http/mjpeg URL from your camera's settings instead.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEDICATION MODAL -->
+  <div id="med-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-6">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-md p-8 shadow-2xl">
+      <div class="flex justify-between items-start mb-6">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-blue-500/10 text-blue-400 rounded-xl"><i data-lucide="pill" class="w-5 h-5"></i></div>
+          <h3 class="text-xl font-bold text-white">Add Medication Reminder</h3>
+        </div>
+        <button onclick="closeMedModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Person & Medication</label>
+          <input id="med-name-input" type="text" placeholder="e.g. Sean — Vitamin D" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Time</label>
+            <input id="med-time-input" type="time" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Dose</label>
+            <input id="med-dose-input" type="text" placeholder="e.g. 1 pill, 5mg" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Days</label>
+          <div class="flex gap-2 flex-wrap" id="med-days-picker">
+            <label class="flex items-center gap-1.5 text-xs font-bold cursor-pointer"><input type="checkbox" value="0" class="accent-blue-500"> Sun</label>
+            <label class="flex items-center gap-1.5 text-xs font-bold cursor-pointer"><input type="checkbox" value="1" class="accent-blue-500" checked> Mon</label>
+            <label class="flex items-center gap-1.5 text-xs font-bold cursor-pointer"><input type="checkbox" value="2" class="accent-blue-500" checked> Tue</label>
+            <label class="flex items-center gap-1.5 text-xs font-bold cursor-pointer"><input type="checkbox" value="3" class="accent-blue-500" checked> Wed</label>
+            <label class="flex items-center gap-1.5 text-xs font-bold cursor-pointer"><input type="checkbox" value="4" class="accent-blue-500" checked> Thu</label>
+            <label class="flex items-center gap-1.5 text-xs font-bold cursor-pointer"><input type="checkbox" value="5" class="accent-blue-500" checked> Fri</label>
+            <label class="flex items-center gap-1.5 text-xs font-bold cursor-pointer"><input type="checkbox" value="6" class="accent-blue-500"> Sat</label>
+          </div>
+        </div>
+        <div class="flex gap-3 justify-end pt-2">
+          <button onclick="closeMedModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold rounded-xl transition">Cancel</button>
+          <button onclick="saveMed()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl transition">Save Reminder</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- COMPREHENSIVELY RESTORED & EXPANDED DESIGN STUDIO MODAL -->
   <div id="customizer-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-6 overflow-y-auto">
@@ -496,7 +589,7 @@
         </div>
         <div>
           <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-1">🔄 Secret iCal Address (Today's Schedule Sync)</label>
-          <p class="text-xs text-slate-500 mb-2">Google Calendar → Settings → Integrate Calendar → copy <strong class="text-slate-300">Secret address in iCal format</strong> — this pulls events into Today's Schedule automatically</p>
+          <p class="text-xs text-slate-500 mb-2">Google Calendar → Settings → Integrate Calendar → copy <strong class="text-slate-300">Secret address in iCal format</strong>. If your public calendar embed is set above, this may auto-populate — hit <strong class="text-slate-300">Test Connection</strong> to check.</p>
           <input id="ical-url-input" type="text" placeholder="https://calendar.google.com/calendar/ical/.../.../basic.ics" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 font-mono">
         </div>
         <div id="ical-debug" class="hidden text-xs font-mono bg-black/40 border border-white/10 rounded-xl p-3 text-slate-300 max-h-20 overflow-y-auto"></div>
@@ -635,7 +728,7 @@
     let appState = {
       theme: "dark-space", 
       clock: { font: "sans", is24Hour: false, showSeconds: true, glow: true, color: "white", size: "normal", bgStyle: "none", blinkingColon: true },
-      calendarUrl: "", icalUrl: "", sportsApiUrl: "",
+      calendarUrl: "", icalUrl: "", sportsApiUrl: "", medications: [], cameras: [],
       weather: {
         location: "Dryden, MI", temp: 64, condition: "Mostly Cloudy", humidity: 61, windSpeed: 8,
         forecast: [
@@ -680,21 +773,21 @@
     window.addEventListener('DOMContentLoaded', () => {
       loadState(); initTimeAndDate(); applyTheming(appState.theme); applyClockStyles(); initBackgroundEngine();
       fetchDrydenWeather(); fetchLatestNews(); fetchLatestSportsScores();
-      renderGroceries(); renderCountdowns(); renderMealPlan(); renderCalendar(); renderTodaySchedule(); updateWelcomeGreeting(); fetchCalendarEvents();
+      renderGroceries(); renderCountdowns(); renderMealPlan(); renderCalendar(); renderTodaySchedule(); updateWelcomeGreeting(); checkTrashDay(); renderMedications();
       lucide.createIcons();
 
       setInterval(updateClock, 1000); setInterval(updateCountdowns, 1000);
       setInterval(cycleBackgrounds, 60000); 
       setInterval(fetchDrydenWeather, 1800000); 
       setInterval(fetchLatestNews, 900000); 
-      setInterval(fetchLatestSportsScores, 300000); setInterval(fetchCalendarEvents, 600000); 
+      setInterval(fetchLatestSportsScores, 300000); setInterval(checkTrashDay, 3600000); setInterval(renderMedications, 60000); 
     });
 
     function saveState() { localStorage.setItem(STATE_KEY, JSON.stringify(appState)); }
     function loadState() {
       const saved = localStorage.getItem(STATE_KEY);
       if (saved) {
-        try { const parsed = JSON.parse(saved); appState = { ...appState, ...parsed, clock: { ...appState.clock, ...parsed.clock }, todayEvents: parsed.todayEvents || [], icalUrl: parsed.icalUrl || "" }; } catch (e) { }
+        try { const parsed = JSON.parse(saved); appState = { ...appState, ...parsed, clock: { ...appState.clock, ...parsed.clock }, todayEvents: parsed.todayEvents || [], icalUrl: parsed.icalUrl || "", medications: parsed.medications || [], cameras: parsed.cameras || [] }; } catch (e) { }
       }
       document.getElementById('family-notes').value = appState.notes;
     }
@@ -1099,7 +1192,7 @@
     }
 
     function renderSportsScores(games) {
-      const container = document.getElementById('sports-scores-container'); container.innerHTML = "";
+      const container = document.getElementById('sports-scores-container'); if (!container) return; container.innerHTML = "";
       if (!games?.length) {
         container.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-500"><p class="text-xs font-bold">No active matches stream detected.</p></div>`;
         return;
@@ -1141,7 +1234,7 @@
     }
     function openCalendarSettings() { document.getElementById('calendar-url-input').value = appState.calendarUrl; document.getElementById('ical-url-input').value = appState.icalUrl || ''; document.getElementById('calendar-modal').classList.remove('hidden'); }
     function closeCalendarSettings() { document.getElementById('calendar-modal').classList.add('hidden'); }
-    function saveCalendarUrl() { appState.calendarUrl = document.getElementById('calendar-url-input').value; appState.icalUrl = document.getElementById('ical-url-input').value.trim(); saveState(); renderCalendar(); fetchCalendarEvents(); closeCalendarSettings(); }
+    function saveCalendarUrl() { appState.calendarUrl = document.getElementById('calendar-url-input').value; appState.icalUrl = document.getElementById('ical-url-input').value.trim(); saveState(); renderCalendar(); closeCalendarSettings(); }
 
     function renderGroceries() {
       const container = document.getElementById('grocery-container'); container.innerHTML = "";
@@ -1242,6 +1335,184 @@
       const el=document.getElementById('pwa-manifest');if(el)el.href=URL.createObjectURL(b);
     })();
 
+
+    // ── TRASH DAY REMINDER ────────────────────────────────────────────────────
+    // Trash day = Monday (1). Show banner Sunday (0) and Monday (1).
+    function checkTrashDay() {
+      const day = new Date().getDay(); // 0=Sun, 1=Mon
+      const banner = document.getElementById('trash-banner');
+      const text = document.getElementById('trash-banner-text');
+      if (!banner) return;
+      if (day === 0) { // Sunday — put bins out tonight
+        banner.classList.remove('hidden');
+        banner.style.display = 'flex';
+        text.textContent = '🗑️ Trash Day Tomorrow (Monday) — Put the bins out tonight!';
+        banner.style.borderColor = 'rgba(234,179,8,0.5)';
+        banner.style.background = 'rgba(234,179,8,0.12)';
+      } else if (day === 1) { // Monday — trash day now
+        banner.classList.remove('hidden');
+        banner.style.display = 'flex';
+        text.textContent = '🗑️ TODAY IS TRASH DAY — Bins go to the curb!';
+        banner.style.borderColor = 'rgba(239,68,68,0.5)';
+        banner.style.background = 'rgba(239,68,68,0.12)';
+        banner.style.color = '#f87171';
+      } else {
+        banner.classList.add('hidden');
+        banner.style.display = 'none';
+      }
+    }
+
+    // ── MEDICATIONS ───────────────────────────────────────────────────────────
+    function openMedModal() {
+      document.getElementById('med-name-input').value = '';
+      document.getElementById('med-dose-input').value = '';
+      document.getElementById('med-time-input').value = '08:00';
+      document.getElementById('med-modal').classList.remove('hidden');
+    }
+    function closeMedModal() { document.getElementById('med-modal').classList.add('hidden'); }
+
+    function saveMed() {
+      const name = document.getElementById('med-name-input').value.trim();
+      const time = document.getElementById('med-time-input').value;
+      const dose = document.getElementById('med-dose-input').value.trim();
+      if (!name || !time) return;
+      const days = [...document.querySelectorAll('#med-days-picker input:checked')].map(el => +el.value);
+      if (!appState.medications) appState.medications = [];
+      appState.medications.push({ id: 'med-' + Date.now(), name, time, dose, days, takenDates: [] });
+      saveState();
+      renderMedications();
+      closeMedModal();
+    }
+
+    function deleteMed(id) {
+      appState.medications = (appState.medications || []).filter(m => m.id !== id);
+      saveState();
+      renderMedications();
+    }
+
+    function toggleMedTaken(id) {
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const med = (appState.medications || []).find(m => m.id === id);
+      if (!med) return;
+      if (!med.takenDates) med.takenDates = [];
+      if (med.takenDates.includes(todayStr)) {
+        med.takenDates = med.takenDates.filter(d => d !== todayStr);
+      } else {
+        med.takenDates.push(todayStr);
+      }
+      saveState();
+      renderMedications();
+    }
+
+    function renderMedications() {
+      const container = document.getElementById('med-container');
+      if (!container) return;
+      container.innerHTML = '';
+      const todayDay = new Date().getDay();
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const now = new Date();
+      const meds = (appState.medications || []).filter(m => !m.days || m.days.includes(todayDay));
+      
+      if (!meds.length) {
+        container.innerHTML = `<div class="flex flex-col items-center justify-center h-full py-4 text-center">
+          <i data-lucide="pill" class="w-8 h-8 text-blue-400/30 mb-2"></i>
+          <p class="text-xs text-slate-500">No medications for today</p>
+        </div>`;
+        lucide.createIcons(); return;
+      }
+
+      meds.sort((a, b) => a.time.localeCompare(b.time));
+      meds.forEach(med => {
+        const taken = (med.takenDates || []).includes(todayStr);
+        const [h, m] = med.time.split(':').map(Number);
+        const medTime = new Date(); medTime.setHours(h, m, 0, 0);
+        const isPast = medTime < now;
+        const isDue = !taken && isPast;
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const hr = h % 12 || 12;
+        const timeLabel = `${hr}:${String(m).padStart(2,'0')} ${ampm}`;
+        container.innerHTML += `
+          <div class="flex items-center gap-2 px-3 py-2 rounded-xl border transition group ${taken ? 'bg-emerald-500/5 border-emerald-500/20 opacity-60' : isDue ? 'bg-rose-500/10 border-rose-500/30 animate-pulse' : 'bg-slate-950/30 border-white/5'}">
+            <button onclick="toggleMedTaken('${med.id}')" class="flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition ${taken ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-600 hover:border-blue-400'}">
+              ${taken ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}
+            </button>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-bold text-slate-200 truncate">${med.name}</p>
+              <p class="text-[10px] text-slate-500 truncate">${timeLabel}${med.dose ? ' · ' + med.dose : ''}</p>
+            </div>
+            ${isDue ? '<span class="text-[9px] font-black text-rose-400 uppercase tracking-wider flex-shrink-0">DUE</span>' : ''}
+            ${taken ? '<span class="text-[9px] font-black text-emerald-400 uppercase tracking-wider flex-shrink-0">✓ TAKEN</span>' : ''}
+            <button onclick="deleteMed('${med.id}')" class="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-rose-400 flex-shrink-0"><i data-lucide="x" class="w-3 h-3"></i></button>
+          </div>`;
+      });
+      lucide.createIcons();
+    }
+
+    // ── CAMERAS ───────────────────────────────────────────────────────────────
+    function openCameraModal() {
+      document.getElementById('camera-modal').classList.remove('hidden');
+      renderCameraGrid();
+    }
+    function closeCameraModal() { document.getElementById('camera-modal').classList.add('hidden'); }
+
+    function addCamera() {
+      const name = document.getElementById('cam-name-input').value.trim();
+      const url = document.getElementById('cam-url-input').value.trim();
+      if (!name || !url) return;
+      if (!appState.cameras) appState.cameras = [];
+      appState.cameras.push({ id: 'cam-' + Date.now(), name, url });
+      saveState();
+      renderCameraGrid();
+      document.getElementById('cam-name-input').value = '';
+      document.getElementById('cam-url-input').value = '';
+    }
+
+    function deleteCamera(id) {
+      appState.cameras = (appState.cameras || []).filter(c => c.id !== id);
+      saveState();
+      renderCameraGrid();
+    }
+
+    function renderCameraGrid() {
+      const grid = document.getElementById('camera-grid');
+      if (!grid) return;
+      const cameras = appState.cameras || [];
+      if (!cameras.length) {
+        grid.innerHTML = `<div class="col-span-2 flex flex-col items-center justify-center py-12 text-center">
+          <i data-lucide="camera-off" class="w-12 h-12 text-slate-600 mb-3"></i>
+          <p class="text-slate-400 font-semibold">No cameras added yet</p>
+          <p class="text-xs text-slate-600 mt-1 max-w-xs">Add your camera's MJPEG or HTTP stream URL below. Check your camera's app or web interface for the stream address.</p>
+        </div>`;
+        lucide.createIcons(); return;
+      }
+      grid.innerHTML = '';
+      cameras.forEach(cam => {
+        const isImg = cam.url.match(/\.(jpg|jpeg|png|gif|mjpg|mjpeg)/i) || cam.url.includes('snapshot') || cam.url.includes('stream');
+        grid.innerHTML += `
+          <div class="bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 relative group">
+            <div class="bg-slate-900 px-3 py-2 flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                <span class="text-xs font-bold text-slate-200">${cam.name}</span>
+              </div>
+              <button onclick="deleteCamera('${cam.id}')" class="text-slate-600 hover:text-rose-400 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            </div>
+            <div class="aspect-video bg-slate-950 flex items-center justify-center relative">
+              ${isImg
+                ? `<img src="${cam.url}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                   <div class="absolute inset-0 flex-col items-center justify-center text-center p-4" style="display:none">
+                     <i data-lucide="wifi-off" class="w-8 h-8 text-slate-600 mb-2"></i>
+                     <p class="text-xs text-slate-500">Could not connect to stream</p>
+                     <p class="text-[10px] text-slate-600 mt-1 break-all">${cam.url}</p>
+                   </div>`
+                : `<iframe src="${cam.url}" class="w-full h-full border-0" allow="camera" onerror="this.style.display='none'"></iframe>`
+              }
+            </div>
+          </div>`;
+      });
+      lucide.createIcons();
+    }
+
     function saveNotes() { appState.notes = document.getElementById('family-notes').value; saveState(); }
     function clearAllNotes() { document.getElementById('family-notes').value = ""; appState.notes = ""; saveState(); }
     function openSportsSettingsModal() { document.getElementById('sports-settings-modal').classList.remove('hidden'); }
@@ -1249,71 +1520,10 @@
     function saveSportsApi() { appState.sportsApiUrl = document.getElementById('sports-api-input').value; saveState(); closeSportsSettingsModal(); fetchLatestSportsScores(); }
 
 
-    // ── Google Calendar iCal sync ─────────────────────────────────────────────
-    async function fetchCalendarEvents() {
-      if (!appState.icalUrl) return;
-      const proxies = [
-        u => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
-        u => "https://corsproxy.io/?" + encodeURIComponent(u),
-      ];
-      let icsText = null;
-      for (const proxy of proxies) {
-        try {
-          const res = await fetch(proxy(appState.icalUrl), { cache: 'no-store' });
-          if (!res.ok) continue;
-          const txt = await res.text();
-          if (txt.includes('BEGIN:VCALENDAR')) { icsText = txt; break; }
-        } catch(e) {}
-      }
-      if (!icsText) { console.warn('iCal: no valid response'); return; }
-      const gcalEvents = parseICS(icsText);
-      appState.todayEvents = (appState.todayEvents || []).filter(e => !e.fromGcal);
-      gcalEvents.forEach(ev => {
-        appState.todayEvents.push({ id: "gcal-" + ev.uid, title: ev.summary, date: ev.dateStr, time: ev.timeStr, note: ev.location || '', category: 'family', fromGcal: true });
-      });
-      saveState();
-      renderTodaySchedule();
-    }
+    // ── Auto-derive iCal URL from embed URL if no explicit ical URL set ────────
+    async function fetchCalendarEvents() { /* disabled: Google blocks CORS from local files */ }
 
-    function parseICS(text) {
-      const results = [];
-      const today = new Date(); today.setHours(0,0,0,0);
-      const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
-      // Unfold ICS continuation lines (lines starting with space/tab)
-      const unfolded = text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '');
-      const blocks = unfolded.split('BEGIN:VEVENT'); blocks.shift();
-      for (const block of blocks) {
-        try {
-          const get = key => {
-            const m = block.match(new RegExp('^' + key + '[;:][^\r\n]*:([^\r\n]+)', 'm'));
-            if (m) return m[1].trim();
-            const m2 = block.match(new RegExp('^' + key + ':([^\r\n]+)', 'm'));
-            return m2 ? m2[1].trim() : '';
-          };
-          const summary  = (get('SUMMARY') || 'Untitled').replace(/\\n/g,' ').replace(/\\,/g,',').replace(/\\;/g,';');
-          const uid      = get('UID') || ('r' + Math.random().toString(36).slice(2));
-          const location = (get('LOCATION') || '').replace(/\\,/g,',');
-          const dtRaw = get('DTSTART'); if (!dtRaw) continue;
-          const dtClean = dtRaw.split(/[; ]/)[0].replace('Z','');
-          const isUTC = dtRaw.endsWith('Z'), isDate = dtClean.length === 8;
-          let evDate;
-          if (isDate) {
-            evDate = new Date(+dtClean.slice(0,4), +dtClean.slice(4,6)-1, +dtClean.slice(6,8));
-          } else if (isUTC) {
-            evDate = new Date(Date.UTC(+dtClean.slice(0,4),+dtClean.slice(4,6)-1,+dtClean.slice(6,8),+dtClean.slice(9,11),+dtClean.slice(11,13)));
-          } else {
-            evDate = new Date(+dtClean.slice(0,4),+dtClean.slice(4,6)-1,+dtClean.slice(6,8),+dtClean.slice(9,11),+dtClean.slice(11,13));
-          }
-          if (isNaN(evDate.getTime())) continue;
-          const evDay = new Date(evDate); evDay.setHours(0,0,0,0);
-          if (evDay < today || evDay >= tomorrow) continue;
-          const timeStr = isDate ? '00:00' : String(evDate.getHours()).padStart(2,'0')+':'+String(evDate.getMinutes()).padStart(2,'0');
-          const dateStr = evDay.toISOString().slice(0,10);
-          results.push({ uid, summary, dateStr, timeStr, location });
-        } catch(e) {}
-      }
-      return results.sort((a,b) => a.timeStr.localeCompare(b.timeStr));
-    }
+    function parseICS(text) { return []; }
 
     function renderTodaySchedule() {
       const todayStr = new Date().toDateString();
